@@ -9,5 +9,5 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["server", "scripts", "src/client/catalog", "src/client/lib/validation.ts"]
+  "include": ["server", "scripts", "src/client/catalog", "src/client/lib/validation.ts", "src/client/lib/router.ts"]
 }

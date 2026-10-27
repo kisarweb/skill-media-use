@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { categories, skills, search, counts, getCategory } from "../src/client/catalog/index.js";
 import { validateFile } from "../src/client/lib/validation.js";
+import { parseHash } from "../src/client/lib/router.js";
 
 let passed = 0;
 const test = (name: string, fn: () => void) => { fn(); passed++; console.log(`ok  ${name}`); };
@@ -53,6 +54,15 @@ test("validateFile rejeita vazio, grande e formato errado", () => {
   assert.match(validateFile({ name: "a.mp4", size: 0, type: "video/mp4" }, rules)!, /vazio/);
   assert.match(validateFile({ name: "a.mp4", size: 11 * 1048576, type: "video/mp4" }, rules)!, /limite/);
   assert.match(validateFile({ name: "a.pdf", size: 10, type: "application/pdf" }, rules)!, /não suportado/);
+});
+
+test("parseHash entende as rotas e rejeita as inválidas", () => {
+  assert.deepEqual(parseHash(""), { name: "dashboard" });
+  assert.deepEqual(parseHash("#/habilidade/tts-narracao"), { name: "skill", id: "tts-narracao" });
+  assert.deepEqual(parseHash("#/busca/cor%20lut"), { name: "search", q: "cor lut" });
+  assert.deepEqual(parseHash("#/categoria"), { name: "notfound" });
+  assert.deepEqual(parseHash("#/busca/%E0%A4%A"), { name: "notfound" });
+  assert.deepEqual(parseHash("#/xyz"), { name: "notfound" });
 });
 
 console.log(`\n${passed} testes passaram.`);
