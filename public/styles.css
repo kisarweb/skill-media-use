@@ -61,6 +61,17 @@ a.card:hover{border-color:var(--accent)}
 .result{margin:0}.result img,.result video{max-width:100%}.tag-real{color:var(--ok)}.tag-simulation{color:var(--sim)}
 .steps{padding-left:1.2rem}
 
+/* Demo: preferências e receitas */
+.input, .textarea{width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);color:var(--ink);font:inherit}
+.textarea{resize:vertical}
+.recipe-item{padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.recipe-item pre{margin:4px 0;font:.85rem var(--mono);white-space:pre-wrap;word-break:break-all}
+.recipe-item .btn-small{margin-left:auto}
+.recipe-item .btn-small:focus-within{outline:2px solid var(--accent)}
+.actions{display:flex;gap:8px;margin-top:8px}
+.demo-form{display:flex;flex-direction:column;gap:8px}
+.demo-code{margin-top:12px}
+
 @media (max-width:800px){
   .sidebar{position:fixed;z-index:20;left:0;top:0;transform:translateX(-100%);transition:transform .2s}
   .nav-open .sidebar{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}

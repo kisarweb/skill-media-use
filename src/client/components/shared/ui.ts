@@ -34,3 +34,9 @@ export const processingStatus = (label: string, percent?: number): HTMLElement =
 
 export const emptyState = (title: string, hint: string): HTMLElement =>
   h("div", { class: "empty" }, h("strong", {}, title), h("p", {}, hint));
+
+export function addStyles(styles: string): void {
+  const style = document.createElement('style');
+  style.textContent = styles;
+  document.head.appendChild(style);
+}

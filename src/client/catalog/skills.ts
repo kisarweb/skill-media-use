@@ -44,5 +44,73 @@ export const skills: SkillPage[] = [
 
   planned({ id: "instalacao-provedores", categoryId: "ambiente", title: "Instalação, login e provedores", summary: "Instalação da skill, sign-in, configuração de provedores e requisitos de RAM.", tags: ["doctor", "setup", "auth", "ram"], refs: ["references/setup-providers.md"] }),
   planned({ id: "comandos-locais", categoryId: "processamento-local", title: "Comandos locais", summary: "Grade de cor, recorte de fundo (cutout), loudness e detecção de batidas executados localmente.", tags: ["grade", "cutout", "loudness", "beats"], refs: ["references/local.md"] }),
-  planned({ id: "preferencias-receitas", categoryId: "preferencias", title: "Preferências e receitas", summary: "Memórias e preferências lembradas, e receitas congeladas para repetir trabalhos semelhantes.", tags: ["memória", "prefs", "recipe"], refs: ["references/memory.md", "scripts/prefs.mjs", "scripts/recipe.mjs"] }),
+  {
+    id: "preferencias-receitas",
+    categoryId: "preferencias",
+    title: "Preferências e receitas",
+    summary: "Memórias e preferências lembradas, e receitas congeladas para repetir trabalhos semelhantes.",
+    description: "Permite salvar e carregar preferências e receitas de uso repetido. As receitas podem incluir configurações de processamento anteriormente aplicadas, como parâmetros de correção, filtros de áudio ou sequências de operações. Esta demonstração usa o localStorage do navegador como armazenamento local, simulando o comportamento esperado da skill real.",
+    status: "simulated",
+    validation: "em-progresso",
+    tags: ["memória", "prefs", "recipe"],
+    prerequisites: [],
+    dependencies: [],
+    demo: {
+      mode: "simulation",
+      componentKey: "preferences-recipes",
+      explanation: "Esta demonstração mostra como salvar e carregar receitas usando o armazenamento local do navegador. Na implementação real, estas receitas seriam persistidas e carregadas pela skill media-use através de comandos como `media-use recipe save` e `media-use recipe load`."
+    },
+    tutorial: {
+      objective: "Entender como criar, salvar e aplicar receitas reutilizáveis para evitar reconfigurações repetitivas em fluxos de trabalho de mídia.",
+      steps: [
+        { title: "Entendendo receitas", content: "Receitas são conjuntos de parâmetros previamente definidos que podem ser reaplicados a novos projetos. Elas armazenam configurações de processamento, como valores de correção (exposure, gamma, saturation), filtros de áudio (ducking threshold, loudness target) ou sequências de operações (ex: recortar → aplicar LUT → exportar)." },
+        { title: "Estrutura de uma receita", content: "Uma receita típica contém: nome amigável, descrição opcional, parêmetros do processamento e metadados (data de criação, última modificação).", code: `{
+  "name": "correcao-basica",
+  "description": "Correção de imagens escuras",
+  "params": {
+    "exposure": 0.8,
+    "gamma": 1.2,
+    "saturation": 1.1
+  },
+  "createdAt": "2025-01-15T10:30:00Z"
+}`, language: "json", filePath: "~/.media-use/recipes/correcao-basica.json" },
+        { title: "Salvando uma receita", content: "Use o comando `media-use recipe save --name <nome> --params '<json>'` para salvar uma receita. No backend local, isso cria um arquivo JSON em `~/.media-use/recipes/`.", code: "media-use recipe save --name correcao-basica --params '{\"exposure\": 0.8, \"gamma\": 1.2, \"saturation\": 1.1}'", language: "bash" },
+        { title: "Carregando uma receita", content: "Use `media-use recipe load --name <nome>` para aplicar os parâmetros salvos ao processo atual.", code: "media-use recipe load --name correcao-basica", language: "bash" },
+        { title: "Listando receitas", content: "Liste todas as receitas salvas com `media-use recipe list`.", code: "media-use recipe list", language: "bash" },
+        { title: "Apagando uma receita", content: "Remova uma receita com `media-use recipe delete --name <nome>`." },
+      ]
+    },
+    examples: [
+      {
+        id: "ex-recipe-correcao",
+        title: "Correção de vídeo escuro",
+        description: "Salva os parâmetros de correção aplicados a um vídeo e reaproxia-los em outro.",
+        useCase: "Quando você ajusta settings de correção para um clip específico e quer aplicar os mesmos ajustes a outros clipes da mesma gravação.",
+        inputs: ["Vídeo escuro", "Parâmetros de correção ajustados"],
+        expectedOutput: "Vídeo com exposição, gama e saturação corrigidos",
+        dependencies: [],
+        codeSnippet: "media-use recipe save --name video-corrigido --params '{\"exposure\": 0.9, \"gamma\": 1.2}'"
+      },
+      {
+        id: "ex-recipe-audio",
+        title: "Mixagem com ducking otimizada",
+        description: "Salva a configuração de ducking aplicada a uma faixa de narração e música.",
+        useCase: "Quando você encontra os níveis ideais de ducking para uma voz e música de fundo e quer reutilizar em outros projetos.",
+        inputs: ["Faixa de áudio", "Configurações de ducking"],
+        expectedOutput: "Áudio mixado com voice-ducking automático",
+        dependencies: ["Provedor de ducking configurado"],
+        codeSnippet: "media-use recipe save --name ducking-podcast --params '{\"ducking_ratio\": 0.3, \"fade_ms\": 50}'"
+      }
+    ],
+    references: [
+      { title: "Skill media-use", url: SKILL_URL },
+      { title: "references/memory.md", filePath: "references/memory.md" },
+      { title: "scripts/prefs.mjs", filePath: "scripts/prefs.mjs" },
+      { title: "scripts/recipe.mjs", filePath: "scripts/recipe.mjs" }
+    ],
+    limitations: [
+      "Esta demonstração usa localStorage do navegador, não o sistema de receitas da skill real.",
+      "Os comandos da skill real (`media-use recipe save/load`) exigem instalação completa do ambiente."
+    ]
+  },
 ];
