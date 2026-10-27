@@ -72,6 +72,15 @@ a.card:hover{border-color:var(--accent)}
 .demo-form{display:flex;flex-direction:column;gap:8px}
 .demo-code{margin-top:12px}
 
+/* Demo: correção de imagem */
+.correction-form{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;padding:12px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r)}
+.correction-form label{display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+.slider{width:160px}
+.preview{margin-top:12px}
+.split{display:flex;gap:16px;flex-wrap:wrap}
+.half{flex:1;min-width:200px;display:flex;flex-direction:column;gap:4px;align-items:center}
+.demo-img{border:1px solid var(--line);border-radius:var(--r);transition:opacity .3s}
+
 @media (max-width:800px){
   .sidebar{position:fixed;z-index:20;left:0;top:0;transform:translateX(-100%);transition:transform .2s}
   .nav-open .sidebar{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}

@@ -22,7 +22,64 @@ export const skills: SkillPage[] = [
   planned({ id: "resolver-midia", categoryId: "resolver-midia", title: "Resolver mídia por intenção", summary: "Localiza ou cria um ativo (música, efeito sonoro, imagem, ícone, logo, voz ou grade de cor) a partir do tipo e da intenção descrita.", tags: ["resolve", "ativos", "intent", "ledger"], refs: ["references/resolve.md"] }),
   planned({ id: "inventario-reutilizacao", categoryId: "resolver-midia", title: "Inventário e reutilização de ativos", summary: "Consulta o que já existe no projeto para reutilizar e adotar ativos antes de gerar mídia nova.", tags: ["candidates", "inventário", "reuso"], refs: ["references/resolve.md"] }),
 
-  planned({ id: "correcao-visual", categoryId: "tratamento-visual", title: "Correção de imagem e vídeo", summary: "Corrige gravações que estão escuras, planas ou mornas.", tags: ["media-treatment", "correção"], refs: ["references/media-treatments.md"] }),
+{
+    id: "correcao-visual",
+    categoryId: "tratamento-visual",
+    title: "Correção de imagem e vídeo",
+    summary: "Corrige gravações que estão escuras, planas ou mornas.",
+    description: "Esta habilidade aplica ajustes de correção (exposição, gama, saturação) a imagens e vídeos para tornar o conteúdo mais legível e visualmente atraente. A demo simula a aplicação desses ajustes de forma interativa, mostrando o efeito sobre a entrada.",
+    status: "simulated",
+    validation: "em-progresso",
+    tags: ["media-treatment", "correção"],
+    prerequisites: [],
+    dependencies: [],
+    demo: {
+      mode: "simulation",
+      componentKey: "image-correction",
+      explanation: "Esta demo permite explorar os ajustes de correção em tempo real, em uma simulação baseada em navegador. Na implementação real, estes ajustes seriam aplicados por meio de comandos da skill media-use como `media-use media correct --exposure 0.8 --gamma 1.2 --saturation 1.1`, usando processamento local ou serviços de provedores."
+    },
+    tutorial: {
+      objective: "Entender como ajustar exposição, gama e saturação para melhorar a qualidade visual de fotos e vídeos.",
+      steps: [
+        { title: "Objetivos da correção", content: "A correção é o primeiro passo para tornar o conteúdo utilizável. Ela lida com três parâmetros principais: exposição (controla o brilho), gama (ajusta a distribuição de tons) e saturação (aumenta/diminui a intensidade das cores)." },
+        { title: "Técnicas básicas", content: "Muitas formas de aplicar correção: automáticas (baseadas em histograma), manuais (sliders) ou por receita (preset). A demo usa ajustes manuais por meio de controles deslizantes para visualizar o efeito imediato.", code: "# Exemplo de ajuste de exposição e gama em imagem com FFmpeg\nffmpeg -i input.mp4 -vf \"eq=brightness=0.2:gamma=1.5:saturation=1.3\" corrected.mp4", language: "bash" },
+        { title: "Parâmetros principais", content: "Os parâmetros mais comuns: Exposição (range: -1.0 a +1.0), Gama (0.5 a 3.0), Saturação (0.0 a 2.0). Valores acima de 1 aumentam o contraste, abaixo suavizam." },
+        { title: "Expor à skill", content: "Na skill media-use, estes parâmetros são expostos por meio da CLI:", code: "# Usando a skill\nmedia-use media correct \\\n  --exposure 0.8 \\\n  --gamma 1.2 \\\n  --saturation 1.1 \\\n  input.mp4 \\\n  --output corrected.mp4", language: "bash" },
+        { title: "Quando usar", content: "Gravação com pouca luz, contraste baixo, cores desbotadas ou imagem não uniforme. A correção também pode ser usada para uniformizar vários clipes de uma mesma cena." },
+        { title: "Erros comuns", content: "Excesso de exposição → imagem sobreexposta (branca). Excesso de gama → distorção de tons. Alta saturação → cores irreais. Sempre verificar em tela cheia." }
+      ]
+    },
+    examples: [
+      {
+        id: "ex-correcao-luzbaixa",
+        title: "Recuperar cena escura",
+        description: "Aplica exposição positiva e gama moderada para recuperar detalhes em sombra.",
+        useCase: "Quando você grava em ambiente com pouca luz e precisa de mais detalhes.",
+        inputs: ["Vídeo escuro", "Ajustes de exposição e gama"],
+        expectedOutput: "Vídeo com melhor distribuição de tons, detalhes visíveis.",
+        dependencies: [],
+        codeSnippet: "media-use media correct --exposure 0.5 --gamma 1.3 --saturation 1.0 cena-escura.mp4"
+      },
+      {
+        id: "ex-correcao-uniforme",
+        title: "Uniformizar tom de pele",
+        description: "Aplica receita para tornar tons de pele consistentes em vários ângulos.",
+        useCase: "Quando você precisa que vários ângulos de uma mesma pessoa fiquem iguais.",
+        inputs: ["Múltiplos clipes de imagem", "Receita de correção"],
+        expectedOutput: "Tons de pele consistentes em todos os clipes.",
+        dependencies: ["Provedor de processamento de imagem configurado"],
+        codeSnippet: "media-use batch apply-recipe --recipe skin-tone.json --input *.jpg"
+      }
+    ],
+    references: [
+      { title: "Skill media-use", url: SKILL_URL },
+      { title: "references/media-treatments.md", filePath: "references/media-treatments.md" }
+    ],
+    limitations: [
+      "Esta demo usa simulação baseada em Canvas, não processamento real de imagem/vídeo.",
+      "Na implementação real, os comandos usam ffmpeg, Provedores AI ou CPU de acordo com a configuração do backend."
+    ]
+  },
   planned({ id: "luts-gradacao", categoryId: "tratamento-visual", title: "LUTs, gradação e comparação de looks", summary: "Aplica LUTs e grades de cor e compara looks lado a lado (grade-compare), a partir do catálogo de LUTs.", tags: ["lut", "grade-compare", "cor"], refs: ["references/grading.md", "luts/"] }),
   planned({ id: "efeitos-visuais", categoryId: "tratamento-visual", title: "Efeitos visuais", summary: "Estiliza a mídia com efeitos como VHS, glitch, ASCII e halftone.", tags: ["vhs", "glitch", "ascii", "halftone"], refs: ["references/media-treatments.md"] }),
 
